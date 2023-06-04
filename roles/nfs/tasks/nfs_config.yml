@@ -1,0 +1,19 @@
+---
+- name: Create a directory 'gitbucket' if it does not exist
+  ansible.builtin.file:
+    path: /gitbucket
+    state: directory
+    mode: '0755'
+
+- name: Configure exports in /etc/exports
+  ansible.builtin.template:
+    src: "exports.j2"
+    dest: "/etc/exports"
+    owner: "root"
+    group: "root"
+    mode: "0644"
+  notify:
+    - Reload nfs
+
+- name: Export file systems in /etc/exports
+  ansible.builtin.command: exportfs -rav

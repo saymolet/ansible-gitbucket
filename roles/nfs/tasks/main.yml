@@ -1,43 +1,6 @@
 ---
 # tasks file for /etc/ansible/roles/nfs
-- name: Install the latest version of nfs-utils and dependencies
-  ansible.builtin.dnf:
-    name: 
-      - nfs-utils
-      - python3
-    state: latest
 
-- name: Create a directory 'gitbucket' if it does not exist
-  ansible.builtin.file:
-    path: /gitbucket
-    state: directory
-    mode: '0755'
-
-- name: Configure exports in /etc/exports
-  ansible.builtin.template:
-    src: "exports.j2"
-    dest: "/etc/exports"
-    owner: "root"
-    group: "root"
-    mode: "0644"
-  notify:
-    - Reload nfs
-
-- name: Export file systems in /etc/exports
-  ansible.builtin.command: exportfs -rav
-
-- name: Permit traffic in public zone for nfs and rpc-bind services
-  ansible.posix.firewalld:
-    zone: public
-    service: "{{item}}"
-    permanent: yes
-    immediate: true
-    state: enabled
-  with_items:
-    - nfs
-    - nfs3  
-    - mountd
-    - rpc-bind
-
-- name: Export file systems in /etc/exports
-  ansible.builtin.command: setsebool -P nfs_export_all_rw 1
+- import_tasks: initial_install.yml
+- import_tasks: nfs_config.yml
+- import_tasks: firewalld_selinux.yml
