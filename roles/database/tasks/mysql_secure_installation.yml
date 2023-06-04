@@ -10,7 +10,10 @@
     - localhost
 
 - name: Set ~/.my.cnf file
-  template: src=dotmy.cnf.j2 dest=/root/.my.cnf mode=0600
+  ansible.builtin.template: 
+    src: dotmy.cnf.j2 
+    dest: /root/.my.cnf 
+    mode: 0600
 
 - name: Delete anonymous MySQL user
   community.mysql.mysql_user: 

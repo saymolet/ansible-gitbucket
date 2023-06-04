@@ -1,2 +1,4 @@
 ---
 # defaults file for /etc/ansible/roles/nfs
+lp_nfsd_exports:
+  - /gitbucket 10.26.0.0/24(rw,no_root_squash,sync
