@@ -1,7 +1,7 @@
 ---
 # tasks file for /etc/ansible/roles/database
 
-import_tasks: initial_install.yml
-import_tasks: mysql_secure_installation.yml
-import_tasks: gitbucket_sql.yml
-import_tasks: firewalld.yml
+- import_tasks: initial_install.yml
+- import_tasks: mysql_secure_installation.yml
+- import_tasks: gitbucket_sql.yml
+- import_tasks: firewalld.yml
