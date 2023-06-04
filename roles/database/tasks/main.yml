@@ -51,6 +51,7 @@
 - name: permit traffic in default zone for mysql service
   ansible.posix.firewalld:
     service: mysql
+    zone: public
     permanent: true
     state: enabled
 
@@ -58,4 +59,5 @@
   ansible.posix.firewalld:
     source: 10.26.0.0/24
     zone: public
-    state: enabled    
+    state: enabled
+    permanent: true
