@@ -1,5 +1,5 @@
-[db-servers]
+[db_servers]
 10.26.0.174
 
-[nfs-servers]
+[nfs_servers]
 10.26.0.76

@@ -1,8 +1,8 @@
 ---
- # - hosts: db-servers
+ # - hosts: db_servers
  #   roles:
  #   - database
 
- - hosts: nfs-servers
+ - hosts: nfs_servers
    roles:
    - nfs
