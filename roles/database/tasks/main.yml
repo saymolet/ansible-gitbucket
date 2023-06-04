@@ -2,12 +2,21 @@
 # tasks file for /etc/ansible/roles/database
 - name: Install the latest version of MySQL
   ansible.builtin.dnf:
-    name: mysql-server
+    name: 
+      - mysql-server
+      - mysql
     state: latest
+
+- name: Start service mysqld, if not started
+  ansible.builtin.service:
+    name: mysqld
+    state: started
 
   # mysql_secure_installation
 - name: Update MariaDB root password
-  mysql_user: name=root host={{item}} password={{mysql_root_password}}
+  community.mysql.mysql_user: 
+    name=root host={{item}} 
+    password={{mysql_root_password}}
   with_items:
     - 127.0.0.1
     - ::1
@@ -18,15 +27,21 @@
 
   # mysql_secure_installation
 - name: Delete anonymous MySQL user
-  mysql_user: name="" host={{item}} state=absent
+  community.mysql.mysql_user: 
+    name="" host={{item}} 
+    state=absent
   with_items:
     - localhost
     - "{{ansible_nodename}}"
 
   # mysql_secure_installation
 - name: Delete Hostname based MySQL user
-  mysql_user: name=root host="{{ansible_nodename}}" state=absent
+  community.mysql.mysql_user: 
+    name=root host="{{ansible_nodename}}" 
+    state=absent
 
   # mysql_secure_installation
 - name: Remove MySQL test database
-  mysql_db: name=test state=absent
+  community.mysql.mysql_db: 
+    name=test 
+    state=absent
