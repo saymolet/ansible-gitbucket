@@ -1,5 +1,7 @@
 ---
 # tasks file for /etc/ansible/roles/database
+
+  # initial_install
 - name: Install the latest version of MySQL and dependencies
   ansible.builtin.dnf:
     name: 
@@ -9,6 +11,7 @@
       - python3-firewall
     state: latest
 
+  # mysql_secure_installation
 - name: Start service mysqld, if not started
   ansible.builtin.service:
     name: mysqld
@@ -17,8 +20,9 @@
   # mysql_secure_installation
 - name: Update MariaDB root password
   community.mysql.mysql_user: 
-    name=root host={{item}} 
-    password={{mysql_root_password}}
+    name: root 
+    host: "{{item}}" 
+    password: "{{mysql_root_password}}"
   with_items:
     - 127.0.0.1
     - ::1
@@ -30,8 +34,9 @@
   # mysql_secure_installation
 - name: Delete anonymous MySQL user
   community.mysql.mysql_user: 
-    name="" host={{item}} 
-    state=absent
+    name: ""
+    host: "{{item}}"
+    state: absent
   with_items:
     - localhost
     - "{{ansible_nodename}}"
@@ -39,15 +44,31 @@
   # mysql_secure_installation
 - name: Delete Hostname based MySQL user
   community.mysql.mysql_user: 
-    name=root host="{{ansible_nodename}}" 
-    state=absent
+    name: root
+    host: "{{ansible_nodename}}"
+    state: absent
 
   # mysql_secure_installation
 - name: Remove MySQL test database
   community.mysql.mysql_db: 
-    name=test 
-    state=absent
+    name: test 
+    state: absent
 
+  # gitbucket_sql
+- name: Create a new database with name 'gitbucket'
+  community.mysql.mysql_db: 
+    name: gitbucket 
+    state: present
+
+  # gitbucket_sql
+- name: Create database user with name 'gitdbuser' with all privileges on gitbucket database
+  community.mysql.mysql_user:
+    name: gitdbuser
+    password: "{{mysql_gitbucket_password}}"
+    priv: 'gitbucket.*:ALL'
+    state: present    
+
+  # firewalld
 - name: permit traffic in default zone for mysql service
   ansible.posix.firewalld:
     service: mysql
@@ -55,6 +76,7 @@
     permanent: true
     state: enabled
 
+  # firewalld
 - name: permit traffic in default zone for mysql service
   ansible.posix.firewalld:
     source: 10.26.0.0/24
