@@ -5,6 +5,7 @@
     name: 
       - mysql-server
       - mysql
+      - python3-PyMySQL
     state: latest
 
 - name: Start service mysqld, if not started
