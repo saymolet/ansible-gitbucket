@@ -28,15 +28,16 @@
 
 - name: Permit traffic in public zone for nfs and rpc-bind services
   ansible.posix.firewalld:
-    service:
-      - nfs
-      - nfs3
-      - mountd
-      - rpc-bind
     zone: public
-    state: enabled
-    permanent: true
+    service: "{{item}}"
+    permanent: yes
     immediate: true
+    state: enabled
+  with_items:
+    - nfs
+    - nfs3  
+    - mountd
+    - rpc-bind
 
 - name: Export file systems in /etc/exports
   ansible.builtin.command: setsebool -P nfs_export_all_rw 1
