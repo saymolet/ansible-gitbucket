@@ -1,11 +1,12 @@
 ---
 # tasks file for /etc/ansible/roles/database
-- name: Install the latest version of MySQL
+- name: Install the latest version of MySQL and dependencies
   ansible.builtin.dnf:
     name: 
       - mysql-server
       - mysql
       - python3-PyMySQL
+      - python3-firewall
     state: latest
 
 - name: Start service mysqld, if not started
@@ -46,3 +47,15 @@
   community.mysql.mysql_db: 
     name=test 
     state=absent
+
+- name: permit traffic in default zone for mysql service
+  ansible.posix.firewalld:
+    service: mysql
+    permanent: true
+    state: enabled
+
+- name: permit traffic in default zone for mysql service
+  ansible.posix.firewalld:
+    source: 10.26.0.0/24
+    zone: public
+    state: enabled    

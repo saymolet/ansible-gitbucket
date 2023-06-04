@@ -1,3 +1,2 @@
 ---
 # vars file for /etc/ansible/roles/database
-mysql_root_password: p@ssw0rd
