@@ -1,2 +1,83 @@
 ---
 # tasks file for /etc/ansible/roles/gitbucket-worker
+
+- name: Install the latest version of dependencies
+  ansible.builtin.dnf:
+    name: 
+      - wget
+      - tomcat
+      - python3
+      - nfs-utils
+      - java-1.8.0-openjdk-devel
+      - policycoreutils-python-utils
+    state: latest
+
+- name: Ensure SELinux is set to permissive mode
+  ansible.builtin.lineinfile:
+    path: /etc/selinux/config
+    regexp: '^SELINUX='
+    line: SELINUX=permissive
+
+- name: Set SELinux to permissive mode
+  ansible.builtin.command: setenforce 0
+
+- name: Insert "JAVA_OPTS" configuration block in /etc/tomcat/tomcat.conf
+  ansible.builtin.blockinfile:
+    path: /etc/tomcat/tomcat.conf
+    block: |
+      JAVA_OPTS="-Djavax.sql.DataSource.Factory=org.apache.commons.dbcp.BasicDataSourceFactory"
+      JAVA_OPTS="-Djava.security.egd=file:/dev/urandom"
+      JAVA_OPTS="-Dgitbucket.home=/gitbucket"      
+
+- name: Download gitbucket.war
+  ansible.builtin.get_url:
+    url: https://github.com/gitbucket/gitbucket/releases/download/{{gitbucket_version}}/gitbucket.war
+    dest: /var/lib/tomcat/webapps/
+    mode: '0644'
+
+- name: Permit traffic in public zone for 8080/tcp
+  ansible.posix.firewalld:
+    port: 8080/tcp
+    zone: public
+    state: enabled
+    permanent: true
+
+  # firewalld
+# - name: Add source range for public zone
+#   ansible.posix.firewalld:
+#     source: 10.26.0.0/24
+#     zone: public
+#     state: enabled
+#     permanent: true
+#     immediate: true
+
+- name: Create a directory 'gitbucket' if it does not exist
+  ansible.builtin.file:
+    path: /gitbucket
+    state: directory
+    mode: '0755'
+  notify:
+    - Reload tomcat
+
+- name: Wait until the file /gitbucket/database.conf is present before continuing
+  ansible.builtin.wait_for:
+    path: /gitbucket/database.conf
+
+- name: Configure database.conf in /gitbucket/database.conf
+  ansible.builtin.template:
+    src: "database.conf.j2"
+    dest: "/gitbucket/database.conf"
+    owner: "tomcat"
+    group: "tomcat"
+    mode: "0644"
+  notify:
+    - Reload tomcat
+
+- name: Mount an NFS volume
+  ansible.posix.mount:
+    src: "{{nfs_server}}:/gitbucket"
+    path: /gitbucket
+    state: mounted
+    fstype: nfs    
+
+# vi /etc/fstab
