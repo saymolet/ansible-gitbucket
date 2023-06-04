@@ -64,9 +64,10 @@
 - name: Create database user with name 'gitdbuser' with all privileges on gitbucket database
   community.mysql.mysql_user:
     name: gitdbuser
+    host: "%"
     password: "{{mysql_gitbucket_password}}"
     priv: 'gitbucket.*:ALL'
-    state: present    
+    state: present   
 
   # firewalld
 - name: permit traffic in default zone for mysql service
