@@ -1,0 +1,14 @@
+---
+- name: Install the latest version of MySQL and dependencies
+  ansible.builtin.dnf:
+    name: 
+      - mysql-server
+      - mysql
+      - python3-PyMySQL
+      - python3-firewall
+    state: latest
+
+- name: Start service mysqld, if not started
+  ansible.builtin.service:
+    name: mysqld
+    state: started

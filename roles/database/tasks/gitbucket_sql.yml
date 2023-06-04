@@ -1,0 +1,13 @@
+---
+- name: Create a new database with name 'gitbucket'
+  community.mysql.mysql_db: 
+    name: gitbucket 
+    state: present
+
+- name: Create database user 'gitdbuser'@'%' with all privileges on gitbucket database
+  community.mysql.mysql_user:
+    name: gitdbuser
+    host: "%"
+    password: "{{mysql_gitbucket_password}}"
+    priv: 'gitbucket.*:ALL'
+    state: present   
