@@ -1,6 +1,13 @@
 ---
 # handlers file for /etc/ansible/roles/gitbucket-worker
 
+- name: Start tomcat
+  ansible.builtin.service:
+    name:
+      - tomcat
+    state: started
+    enabled: true
+
 - name: Restart tomcat
   ansible.builtin.service:
     name:

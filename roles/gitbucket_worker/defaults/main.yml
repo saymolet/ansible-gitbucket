@@ -1,5 +1,5 @@
 ---
 # defaults file for /etc/ansible/roles/gitbucket-worker
 gitbucket_version: 4.39.0
-nfs_server: "{{ hostvars['nfs_servers'].ansible_host }}"
-mysql_server: "{{ hostvars['db_servers'].ansible_host }}"
+nfs_server: {{ hostvars['nfs_servers'].ansible_host }}
+mysql_server: {{ hostvars['db_servers'].ansible_host }}

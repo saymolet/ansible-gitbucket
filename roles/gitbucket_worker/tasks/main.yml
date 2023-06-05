@@ -59,7 +59,7 @@
     group: tomcat
     mode: '0755'
   notify:
-    - Restart tomcat
+    - Start tomcat
 
 - name: Wait until the file /gitbucket/database.conf is present before continuing
   ansible.builtin.wait_for:
