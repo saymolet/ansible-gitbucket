@@ -2,8 +2,8 @@
 # handlers file for /etc/ansible/roles/nfs
 - name: Reload nfs
   ansible.builtin.service:
-    name:
-      - nfs-server
-      - rpcbind
+    name: "{{item}}"
     state: restarted
-    
+  with_items:
+    - nfs-server
+    - rpcbind
