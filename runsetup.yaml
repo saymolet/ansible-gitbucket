@@ -17,3 +17,6 @@
 - hosts: workers
   roles:
   - gitbucket_worker
+  vars:
+    mysql_server: "{{ hostvars['db_servers'].ansible_host }}"
+    nfs_server: "{{ hostvars['nfs_servers'].ansible_host }}"
