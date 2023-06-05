@@ -25,9 +25,8 @@
   ansible.builtin.blockinfile:
     path: /etc/tomcat/tomcat.conf
     block: |
-      JAVA_OPTS="-Djavax.sql.DataSource.Factory=org.apache.commons.dbcp.BasicDataSourceFactory"
       JAVA_OPTS="-Djava.security.egd=file:/dev/urandom"
-      JAVA_OPTS="-Dgitbucket.home=/gitbucket"      
+      JAVA_OPTS="-Dgitbucket.home=/gitbucket"
 
 - name: Download gitbucket.war
   ansible.builtin.get_url:
@@ -56,9 +55,11 @@
   ansible.builtin.file:
     path: /gitbucket
     state: directory
+    owner: tomcat
+    group: tomcat
     mode: '0755'
   notify:
-    - Reload tomcat
+    - Restart tomcat
 
 - name: Wait until the file /gitbucket/database.conf is present before continuing
   ansible.builtin.wait_for:
@@ -72,13 +73,11 @@
     group: "tomcat"
     mode: "0644"
   notify:
-    - Reload tomcat
+    - Restart tomcat
 
 - name: Mount an NFS volume
   ansible.posix.mount:
     src: "{{nfs_server}}:/gitbucket"
     path: /gitbucket
     state: mounted
-    fstype: nfs    
-
-# vi /etc/fstab
+    fstype: nfs

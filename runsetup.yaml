@@ -1,12 +1,19 @@
 ---
- - hosts: db_servers
-   roles:
-   - database
+- hosts: db_servers
+  roles:
+  - database
+  vars_prompt:
+    - name: mysql_root_password
+      prompt: "Enter your MySQL root password"
+      private: yes
+    - name: mysql_gitbucket_password
+      prompt: "Enter your MySQL gitdbuser password"
+      private: yes      
 
- - hosts: nfs_servers
-   roles:
-   - nfs
+- hosts: nfs_servers
+ roles:
+ - nfs
 
- - hosts: workers
-   roles:
-   - gitbucket_worker
+- hosts: workers
+ roles:
+ - gitbucket_worker
