@@ -1,2 +1,9 @@
 ---
 # handlers file for /etc/ansible/roles/gitbucket-worker
+
+- name: Reload tomcat
+  ansible.builtin.service:
+    name:
+      - tomcat
+    state: restarted
+    enabled: true
