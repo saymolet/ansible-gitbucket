@@ -3,14 +3,12 @@
 
 - name: Start tomcat
   ansible.builtin.service:
-    name:
-      - tomcat
+    name: tomcat
     state: started
     enabled: true
 
 - name: Restart tomcat
   ansible.builtin.service:
-    name:
-      - tomcat
+    name: tomcat
     state: restarted
     enabled: true
