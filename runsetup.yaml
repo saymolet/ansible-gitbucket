@@ -2,9 +2,6 @@
 - hosts: db_servers
   roles:
   - database
-  # vars:
-  #   mysql_root_password: "{{ mysql_root_password_secret }}"
-  #   mysql_gitbucket_password: "{{ mysql_gitbucket_password_secret }}"
 
 - hosts: nfs_servers
   roles:
@@ -14,6 +11,5 @@
   roles:
   - gitbucket_worker
   vars:
-    nfs_server: "{{ 'groups.nfs_servers.0' }}"
-    mysql_server: "{{ 'groups.db_servers.0' }}"
-    # mysql_gitbucket_password: "{{ mysql_gitbucket_password_secret }}"
+    nfs_server: "{{ groups.nfs_servers.0 }}"
+    mysql_server: "{{ groups.db_servers.0 }}"
