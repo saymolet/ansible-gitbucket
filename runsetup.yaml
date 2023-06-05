@@ -11,9 +11,9 @@
       private: yes      
 
 - hosts: nfs_servers
- roles:
- - nfs
+  roles:
+  - nfs
 
 - hosts: workers
- roles:
- - gitbucket_worker
+  roles:
+  - gitbucket_worker
