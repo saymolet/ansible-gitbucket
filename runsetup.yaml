@@ -2,13 +2,9 @@
 - hosts: db_servers
   roles:
   - database
-  vars_prompt:
-    - name: mysql_root_password
-      prompt: "Enter your MySQL root password"
-      private: yes
-    - name: mysql_gitbucket_password
-      prompt: "Enter your MySQL gitdbuser password"
-      private: yes      
+  # vars:
+  #   mysql_root_password: "{{ mysql_root_password_secret }}"
+  #   mysql_gitbucket_password: "{{ mysql_gitbucket_password_secret }}"
 
 - hosts: nfs_servers
   roles:
@@ -20,3 +16,4 @@
   vars:
     nfs_server: "{{ 'groups.nfs_servers.0' }}"
     mysql_server: "{{ 'groups.db_servers.0' }}"
+    # mysql_gitbucket_password: "{{ mysql_gitbucket_password_secret }}"
