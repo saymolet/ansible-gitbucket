@@ -1,8 +1,12 @@
 ---
- # - hosts: db_servers
- #   roles:
- #   - database
+ - hosts: db_servers
+   roles:
+   - database
 
  - hosts: nfs_servers
    roles:
    - nfs
+
+ - hosts: workers
+   roles:
+   - gitbucket_worker
