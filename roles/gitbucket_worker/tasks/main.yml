@@ -74,10 +74,13 @@
     name: tomcat
     state: started
     enabled: true
+  run_once: true
 
 - name: Wait until the file /gitbucket/database.conf is present before continuing
   ansible.builtin.wait_for:
     path: /gitbucket/database.conf
+    delay: 60
+  run_once: true  
 
 - name: Configure database.conf in /gitbucket/database.conf
   ansible.builtin.template:
@@ -86,7 +89,13 @@
     owner: "tomcat"
     group: "tomcat"
     mode: "0644"
-  run_once: true  
+  run_once: true
+
+- name: Restart tomcat
+  ansible.builtin.service:
+    name: tomcat
+    state: restarted
+    enabled: true
 
 # - name: Move gitbucket config to temporary directory
 #   ansible.builtin.shell:
@@ -106,9 +115,3 @@
 #     cmd: rm -rf /tmp/git_tmp/
 #   args:
 #     executable: /bin/bash
-
-- name: Restart tomcat
-  ansible.builtin.service:
-    name: tomcat
-    state: restarted
-    enabled: true
