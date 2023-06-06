@@ -81,7 +81,10 @@
     mode: "0644"
 
 - name: Move gitbucket config to temporary directory
-  ansible.builtin.command: mv /gitbucket/* /tmp/git_tmp/
+  ansible.builtin.shell:
+    cmd: mv /gitbucket/* /tmp/git_tmp/
+  args:
+    executable: /bin/bash
 
 - name: Mount an NFS volume
   ansible.posix.mount:
@@ -91,7 +94,10 @@
     fstype: nfs
 
 - name: Move gitbucket config back to original destination and fix ownership
-  ansible.builtin.command: mv /tmp/git_tmp/* /gitbucket/ && chown -R tomcat:tomcat /gitbucket/ && rmdir /tmp/git_tmp
+  ansible.builtin.shell:
+    cmd: mv /tmp/git_tmp/* /gitbucket/ && chown -R tomcat:tomcat /gitbucket/ && rmdir /tmp/git_tmp
+  args:
+    executable: /bin/bash
 
 - name: Restart tomcat
   ansible.builtin.service:
