@@ -12,6 +12,14 @@
       - policycoreutils-python-utils
     state: latest
 
+- name: Create a directory 'gitbucket' if it does not exist
+  ansible.builtin.file:
+    path: /gitbucket
+    state: directory
+    owner: tomcat
+    group: tomcat
+    mode: '0755'
+
 - name: Ensure SELinux is set to permissive mode
   ansible.builtin.lineinfile:
     path: /etc/selinux/config
@@ -51,15 +59,11 @@
 #     permanent: true
 #     immediate: true
 
-- name: Create a directory 'gitbucket' if it does not exist
-  ansible.builtin.file:
-    path: /gitbucket
-    state: directory
-    owner: tomcat
-    group: tomcat
-    mode: '0755'
-  notify:
-    - Start tomcat
+- name: Start tomcat, if not started
+  ansible.builtin.service:
+    name: tomcat
+    state: started
+    enabled: true
 
 - name: Wait until the file /gitbucket/database.conf is present before continuing
   ansible.builtin.wait_for:
@@ -72,8 +76,12 @@
     owner: "tomcat"
     group: "tomcat"
     mode: "0644"
-  notify:
-    - Restart tomcat
+
+- name: Restart tomcat
+  ansible.builtin.service:
+    name: tomcat
+    state: restarted
+    enabled: true
 
 - name: Mount an NFS volume
   ansible.posix.mount:

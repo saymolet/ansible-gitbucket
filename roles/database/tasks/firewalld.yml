@@ -5,6 +5,7 @@
     zone: public
     state: enabled
     permanent: true
+    immediate: true
 
   # firewalld
 - name: Add source range for public zone
