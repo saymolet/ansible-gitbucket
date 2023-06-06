@@ -98,6 +98,7 @@
     cmd: mv /tmp/git_tmp/* /gitbucket/ && chown -R tomcat:tomcat /gitbucket/
   args:
     executable: /bin/bash
+  run_once: true  
 
 - name: Clean up
   ansible.builtin.shell:
