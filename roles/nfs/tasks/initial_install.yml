@@ -2,6 +2,6 @@
 - name: Install the latest version of nfs-utils and dependencies
   ansible.builtin.dnf:
     name: 
-      - nfs-utils
       - python3
+      - nfs-utils
     state: latest

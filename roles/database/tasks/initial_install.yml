@@ -2,8 +2,9 @@
 - name: Install the latest version of MySQL and dependencies
   ansible.builtin.dnf:
     name: 
-      - mysql-server
       - mysql
+      - python3
+      - mysql-server
       - python3-PyMySQL
       - python3-firewall
     state: latest

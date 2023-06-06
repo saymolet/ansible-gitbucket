@@ -81,7 +81,7 @@
     mode: "0644"
 
 - name: Move gitbucket config to temporary directory
-  ansible.builtin.command: mv /gitbucket/* /tmp/tmpgit/
+  ansible.builtin.command: mv /gitbucket/* /tmp/git_tmp/
 
 - name: Mount an NFS volume
   ansible.posix.mount:
