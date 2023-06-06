@@ -12,13 +12,16 @@
       - policycoreutils-python-utils
     state: latest
 
-- name: Create a directory 'gitbucket' if it does not exist
+- name: Create directories '/gitbucket' and '/tmp/git_tmp' if it does not exist
   ansible.builtin.file:
-    path: /gitbucket
+    path: "{{ item }}"
     state: directory
     owner: tomcat
     group: tomcat
     mode: '0755'
+  with_items:
+    - /gitbucket
+    - /tmp/git_tmp
 
 - name: Ensure SELinux is set to permissive mode
   ansible.builtin.lineinfile:
@@ -77,11 +80,8 @@
     group: "tomcat"
     mode: "0644"
 
-- name: Restart tomcat
-  ansible.builtin.service:
-    name: tomcat
-    state: restarted
-    enabled: true
+- name: Move gitbucket config to temporary directory
+  ansible.builtin.command: mv /gitbucket/* /tmp/tmpgit/
 
 - name: Mount an NFS volume
   ansible.posix.mount:
@@ -89,3 +89,12 @@
     path: /gitbucket
     state: mounted
     fstype: nfs
+
+- name: Move gitbucket config back to original destination and fix ownership
+  ansible.builtin.command: mv /tmp/git_tmp/* /gitbucket/ && chown -R tomcat:tomcat /gitbucket/ && rmdir /tmp/git_tmp
+
+- name: Restart tomcat
+  ansible.builtin.service:
+    name: tomcat
+    state: restarted
+    enabled: true
