@@ -62,6 +62,13 @@
 #     permanent: true
 #     immediate: true
 
+- name: Mount an NFS volume
+  ansible.posix.mount:
+    src: "{{nfs_server}}:/gitbucket"
+    path: /gitbucket
+    state: mounted
+    fstype: nfs
+
 - name: Start tomcat, if not started
   ansible.builtin.service:
     name: tomcat
@@ -79,32 +86,26 @@
     owner: "tomcat"
     group: "tomcat"
     mode: "0644"
-
-- name: Move gitbucket config to temporary directory
-  ansible.builtin.shell:
-    cmd: mv /gitbucket/* /tmp/git_tmp/
-  args:
-    executable: /bin/bash
-
-- name: Mount an NFS volume
-  ansible.posix.mount:
-    src: "{{nfs_server}}:/gitbucket"
-    path: /gitbucket
-    state: mounted
-    fstype: nfs
-
-- name: Move gitbucket config back to original destination and fix ownership
-  ansible.builtin.shell:
-    cmd: mv /tmp/git_tmp/* /gitbucket/ && chown -R tomcat:tomcat /gitbucket
-  args:
-    executable: /bin/bash
   run_once: true  
 
-- name: Clean up
-  ansible.builtin.shell:
-    cmd: rm -rf /tmp/git_tmp/
-  args:
-    executable: /bin/bash
+# - name: Move gitbucket config to temporary directory
+#   ansible.builtin.shell:
+#     cmd: mv /gitbucket/* /tmp/git_tmp/
+#   args:
+#     executable: /bin/bash
+
+# - name: Move gitbucket config back to original destination and fix ownership
+#   ansible.builtin.shell:
+#     cmd: mv /tmp/git_tmp/* /gitbucket/ && chown -R tomcat:tomcat /gitbucket
+#   args:
+#     executable: /bin/bash
+#   run_once: true  
+
+# - name: Clean up
+#   ansible.builtin.shell:
+#     cmd: rm -rf /tmp/git_tmp/
+#   args:
+#     executable: /bin/bash
 
 - name: Restart tomcat
   ansible.builtin.service:
