@@ -18,7 +18,7 @@
     immediate: true    
   with_items:
     - http
-    - htpps
+    - https
 
 - name: Set SELinux boolean for httpd proxy
   ansible.builtin.command: setsebool -P httpd_can_network_relay 1
