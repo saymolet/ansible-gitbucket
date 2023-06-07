@@ -90,28 +90,3 @@
     group: "tomcat"
     mode: "0644"
   run_once: true
-
-- name: Restart tomcat
-  ansible.builtin.service:
-    name: tomcat
-    state: restarted
-    enabled: true
-
-# - name: Move gitbucket config to temporary directory
-#   ansible.builtin.shell:
-#     cmd: mv /gitbucket/* /tmp/git_tmp/
-#   args:
-#     executable: /bin/bash
-
-# - name: Move gitbucket config back to original destination and fix ownership
-#   ansible.builtin.shell:
-#     cmd: mv /tmp/git_tmp/* /gitbucket/ && chown -R tomcat:tomcat /gitbucket
-#   args:
-#     executable: /bin/bash
-#   run_once: true  
-
-# - name: Clean up
-#   ansible.builtin.shell:
-#     cmd: rm -rf /tmp/git_tmp/
-#   args:
-#     executable: /bin/bash

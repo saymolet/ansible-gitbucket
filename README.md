@@ -8,14 +8,16 @@
 * ansible-galaxy collection install ansible.posix
 
 ## Usage
-Edit `hosts` file to include your managed machine adresses. Change default passwords inside `vault.yml` with
-```
-ansible-vault edit vault.yml
-```
+Edit `hosts` file to include your managed machine adresses. 
 
-After that change the default password "root" for vault.yml
+Сhange the default password 'root' for vault.yml
 ```
 ansible-vault rekey vault.yml
+```
+
+Change default password variables inside `vault.yml` with
+```
+ansible-vault edit vault.yml
 ```
 
 Initiate a playbook by running:
