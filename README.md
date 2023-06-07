@@ -1,6 +1,8 @@
 # ansible-gitbucket
 
-![diagram](images/diagram.svg)
+<p align="center">
+  <img src="images/diagram.svg" />
+</p>
 
 ## Requirements
 ### On Host:
