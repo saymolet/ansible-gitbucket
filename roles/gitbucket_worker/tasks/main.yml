@@ -76,7 +76,7 @@
 - name: Start tomcat, if not started
   ansible.builtin.service:
     name: tomcat
-    state: started
+    state: restarted
     enabled: true
   run_once: true
 
