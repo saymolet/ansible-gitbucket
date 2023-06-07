@@ -1,2 +1,46 @@
 ---
 # tasks file for /etc/ansible/roles/load_balancer
+
+- name: Install the latest version of dependencies
+  ansible.builtin.dnf:
+    name: 
+      - nginx
+      - python3
+      - policycoreutils-python-utils
+    state: latest
+
+- name: Permit traffic in public zone for http/s services
+  ansible.posix.firewalld:
+    service: "{{ item }}"
+    zone: public
+    state: enabled
+    permanent: true
+    immediate: true    
+  with_items:
+    - http
+    - htpps
+
+- name: Set SELinux boolean for httpd proxy
+  ansible.builtin.command: setsebool -P httpd_can_network_relay 1
+
+- name: Configure exports in /etc/exports
+  ansible.builtin.template:
+    src: "upstream.conf.j2"
+    dest: "/etc/nginx/conf.d/upstream.conf"
+    owner: "root"
+    group: "root"
+    mode: "0644"
+
+- name: Configure exports in /etc/exports
+  ansible.builtin.template:
+    src: "proxy.conf.j2"
+    dest: "/etc/nginx/default.d/proxy.conf"
+    owner: "root"
+    group: "root"
+    mode: "0644"    
+
+- name: Start nginx, if not started
+  ansible.builtin.service:
+    name: nginx
+    state: restarted
+    enabled: true

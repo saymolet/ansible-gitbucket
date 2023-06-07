@@ -1,5 +1,7 @@
 # ansible-gitbucket
 
+![diagram](images/diagram.svg)
+
 ## Requirements
 ### On Host:
 * dnf install mysql

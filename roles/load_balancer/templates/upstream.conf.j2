@@ -1,0 +1,6 @@
+upstream backend {
+    ip_hash;
+    {% for item in worker_ips %}
+    server {{ item }}:8080;
+    {% endfor %}
+}

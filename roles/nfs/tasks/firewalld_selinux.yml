@@ -2,7 +2,7 @@
 - name: Permit traffic in public zone for nfs and rpc-bind services
   ansible.posix.firewalld:
     zone: public
-    service: "{{item}}"
+    service: "{{ item }}"
     permanent: yes
     immediate: true
     state: enabled

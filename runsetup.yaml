@@ -30,3 +30,10 @@
     - name: Wait for tomcat to initiate gitbucket per host
       ansible.builtin.wait_for:
         timeout: 60
+
+- name: Playbook with load balancer instructions
+  hosts: lb
+  roles:
+  - load_balancer
+  vars:
+    worker_ips: "{{ groups.workers }}"
