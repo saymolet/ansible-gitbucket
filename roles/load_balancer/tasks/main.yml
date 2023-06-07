@@ -23,7 +23,7 @@
 - name: Set SELinux boolean for httpd proxy
   ansible.builtin.command: setsebool -P httpd_can_network_relay 1
 
-- name: Configure exports in /etc/exports
+- name: Configure "/etc/nginx/conf.d/upstream.conf"
   ansible.builtin.template:
     src: "upstream.conf.j2"
     dest: "/etc/nginx/conf.d/upstream.conf"
@@ -31,7 +31,7 @@
     group: "root"
     mode: "0644"
 
-- name: Configure exports in /etc/exports
+- name: Configure "/etc/nginx/default.d/proxy.conf"
   ansible.builtin.template:
     src: "proxy.conf.j2"
     dest: "/etc/nginx/default.d/proxy.conf"
@@ -39,14 +39,14 @@
     group: "root"
     mode: "0644"
 
-- name: Configure exports in /etc/exports
+- name: Configure "/etc/nginx/nginx.conf"
   ansible.builtin.template:
     src: "nginx.conf.j2"
     dest: "/etc/nginx/nginx.conf"
     owner: "root"
     group: "root"
-    mode: "0644"       
-
+    mode: "0644"
+    
 - name: Start nginx, if not started
   ansible.builtin.service:
     name: nginx
