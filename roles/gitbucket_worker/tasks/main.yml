@@ -12,7 +12,7 @@
       - policycoreutils-python-utils
     state: latest
 
-- name: Create directories '/gitbucket' if it does not exist
+- name: Create directory "/gitbucket" if it does not exist
   ansible.builtin.file:
     path: /gitbucket
     state: directory
@@ -29,7 +29,7 @@
 - name: Set SELinux to permissive mode
   ansible.builtin.command: setenforce 0
 
-- name: Insert "JAVA_OPTS" configuration block in /etc/tomcat/tomcat.conf
+- name: Insert "JAVA_OPTS" configuration block in "/etc/tomcat/tomcat.conf"
   ansible.builtin.blockinfile:
     path: /etc/tomcat/tomcat.conf
     block: |
@@ -66,6 +66,13 @@
     state: mounted
     fstype: nfs
 
+- name: Change file ownership, group and permissions for "/gitbucket"
+  ansible.builtin.file:
+    path: "/gitbucket"
+    owner: "tomcat"
+    group: "tomcat"
+    mode: "0755"    
+
 - name: Start tomcat, if not started
   ansible.builtin.service:
     name: tomcat
@@ -73,17 +80,17 @@
     enabled: true
   run_once: true
 
-- name: Wait until the file /gitbucket/database.conf is present before continuing
+- name: Wait until the file "/gitbucket/database.conf" is present before continuing
   ansible.builtin.wait_for:
     path: /gitbucket/database.conf
     delay: 60
   run_once: true  
 
-- name: Configure database.conf in /gitbucket/database.conf
+- name: Configure database.conf in "/gitbucket/database.conf"
   ansible.builtin.template:
     src: "database.conf.j2"
     dest: "/gitbucket/database.conf"
     owner: "tomcat"
     group: "tomcat"
-    mode: "0644"
+    mode: "0755"
   run_once: true
