@@ -53,7 +53,7 @@
 - name: Download and unarchive gitbucket.war
   ansible.builtin.unarchive:
     src: https://github.com/gitbucket/gitbucket/releases/download/{{gitbucket_version}}/gitbucket.war
-    dest: /var/lib/tomcat/webapps/gitbucket
+    dest: /var/lib/tomcat/webapps/
     remote_src: yes    
 
 - name: Recursively change ownership on gitbucket
