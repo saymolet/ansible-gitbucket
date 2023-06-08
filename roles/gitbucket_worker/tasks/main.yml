@@ -138,6 +138,10 @@
     state: restarted
     enabled: true
 
+- name: Wait for tomcat to initiate gitbucket per host
+  ansible.builtin.wait_for:
+    timeout: 45
+
 - name: Create directory "/gitbucket/plugins" if it does not exist
   ansible.builtin.file:
     path: /gitbucket/plugins
