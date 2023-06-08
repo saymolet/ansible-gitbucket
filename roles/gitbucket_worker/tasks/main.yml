@@ -22,6 +22,7 @@
   with_items:
    - /gitbucket
    - /tmp/plugins/
+   - /var/lib/tomcat/webapps/gitbucket
 
 - name: Ensure SELinux is set to permissive mode
   ansible.builtin.lineinfile:
@@ -53,21 +54,23 @@
 - name: Download and unarchive gitbucket.war
   ansible.builtin.unarchive:
     src: https://github.com/gitbucket/gitbucket/releases/download/{{gitbucket_version}}/gitbucket.war
-    dest: /var/lib/tomcat/webapps/
-    remote_src: yes    
+    dest: /var/lib/tomcat/webapps/gitbucket
+    remote_src: yes  
+    owner: tomcat
+    group: tomcat
 
-- name: Recursively change ownership on gitbucket
-  file:
-    path: "/var/lib/tomcat/webapps/gitbucket"
-    state: directory
-    owner: "tomcat"
-    group: "tomcat"  
-    recurse: yes
+# - name: Recursively change ownership on gitbucket
+#   file:
+#     path: "/var/lib/tomcat/webapps/gitbucket"
+#     state: directory
+#     owner: "tomcat"
+#     group: "tomcat"  
+#     recurse: yes
 
-- name: Delete gitbucket.war
-  file:
-    path: "/var/lib/tomcat/webapps/gitbucket.war"
-    state: absent
+# - name: Delete gitbucket.war
+#   file:
+#     path: "/var/lib/tomcat/webapps/gitbucket.war"
+#     state: absent
 
 - name: Move plugins to /tmp/plugins/
   ansible.builtin.shell:
