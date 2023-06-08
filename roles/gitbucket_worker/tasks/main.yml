@@ -115,6 +115,7 @@
     name: tomcat
     state: restarted
     enabled: true
+  run_once: true   
 
 - name: Wait until the file "/gitbucket/database.conf" is present before continuing
   ansible.builtin.wait_for:
@@ -131,6 +132,15 @@
     mode: "0755"
   run_once: true
 
+- name: Create directory "/gitbucket/plugins" if it does not exist
+  ansible.builtin.file:
+    path: /gitbucket/plugins
+    state: directory
+    owner: tomcat
+    group: tomcat
+    mode: '0755'
+  run_once: true  
+
 - name: Move plugins to /gitbucket/plugins
   ansible.builtin.shell:
     cmd: mv /tmp/plugins/* /gitbucket/plugins/
@@ -144,9 +154,3 @@
     mode: "0755"
     recurse: yes
   run_once: true  
-
-- name: Restart tomcat
-  ansible.builtin.service:
-    name: tomcat
-    state: restarted
-    enabled: true  
