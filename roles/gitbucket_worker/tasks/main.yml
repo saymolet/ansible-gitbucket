@@ -12,13 +12,16 @@
       - policycoreutils-python-utils
     state: latest
 
-- name: Create directory "/gitbucket" if it does not exist
+- name: Create directory "/gitbucket" and "/tmp/plugins" if it does not exist
   ansible.builtin.file:
-    path: /gitbucket
+    path: "{{ item }}"
     state: directory
     owner: tomcat
     group: tomcat
     mode: '0755'
+  with_items:
+   - /gitbucket
+   - /tmp/plugins/
 
 - name: Ensure SELinux is set to permissive mode
   ansible.builtin.lineinfile:
@@ -41,6 +44,29 @@
     url: https://github.com/gitbucket/gitbucket/releases/download/{{gitbucket_version}}/gitbucket.war
     dest: /var/lib/tomcat/webapps/
     mode: '0644'
+
+- name: Extract gitbucket.war
+  ansible.builtin.unarchive:
+    src: "/var/lib/tomcat/webapps/gitbucket.war"
+    dest: "/var/lib/tomcat/webapps/gitbucket"
+
+- name: Recursively change ownership on gitbucket
+  file:
+    path: "/var/lib/tomcat/webapps/gitbucket"
+    state: directory
+    owner: "tomcat"
+    group: "tomcat"  
+    recurse: yes
+
+- name: Delete gitbucket.war
+  file:
+    path: "/var/lib/tomcat/webapps/gitbucket.war"
+    state: absent
+
+- name: Move plugins to /tmp/plugins/
+  ansible.builtin.shell:
+    cmd: mv WEB-INF/classes/plugins/* /tmp/plugins/
+    chdir: /var/lib/tomcat/webapps/gitbucket/
 
 - name: Permit traffic in public zone for 8080/tcp
   ansible.posix.firewalld:
@@ -71,19 +97,19 @@
     path: "/gitbucket"
     owner: "tomcat"
     group: "tomcat"
-    mode: "0755"    
+    mode: "0755"   
+    recurse: yes 
 
 - name: Start tomcat, if not started
   ansible.builtin.service:
     name: tomcat
     state: restarted
     enabled: true
-  run_once: true
 
 - name: Wait until the file "/gitbucket/database.conf" is present before continuing
   ansible.builtin.wait_for:
     path: /gitbucket/database.conf
-    delay: 60
+    delay: 45
   run_once: true  
 
 - name: Configure database.conf in "/gitbucket/database.conf"
@@ -94,3 +120,23 @@
     group: "tomcat"
     mode: "0755"
   run_once: true
+
+- name: Move plugins to /gitbucket/plugins
+  ansible.builtin.shell:
+    cmd: mv /tmp/plugins/* /gitbucket/plugins/
+  run_once: true  
+
+- name: Change file ownership, group and permissions for "/gitbucket"
+  ansible.builtin.file:
+    path: "/gitbucket"
+    owner: "tomcat"
+    group: "tomcat"
+    mode: "0755"
+    recurse: yes
+  run_once: true  
+
+- name: Restart tomcat
+  ansible.builtin.service:
+    name: tomcat
+    state: restarted
+    enabled: true  

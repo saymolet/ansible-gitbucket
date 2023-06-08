@@ -17,19 +17,19 @@
     nfs_server: "{{ groups.nfs_servers.0 }}"
     mysql_server: "{{ groups.db_servers.0 }}"
 
-- name: Restart tomcat on workers hosts sequentially with a delay in between each host
-  hosts: workers
-  serial: 1
-  tasks:
-    - name: Restart tomcat
-      ansible.builtin.service:
-        name: tomcat
-        state: restarted
-        enabled: true
+# - name: Restart tomcat on workers hosts sequentially with a delay in between each host
+#   hosts: workers
+#   serial: 1
+#   tasks:
+#     - name: Restart tomcat
+#       ansible.builtin.service:
+#         name: tomcat
+#         state: restarted
+#         enabled: true
 
-    - name: Wait for tomcat to initiate gitbucket per host
-      ansible.builtin.wait_for:
-        timeout: 60
+#     - name: Wait for tomcat to initiate gitbucket per host
+#       ansible.builtin.wait_for:
+#         timeout: 60
 
 - name: Playbook with load balancer instructions
   hosts: lb
