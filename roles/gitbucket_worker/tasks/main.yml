@@ -5,6 +5,7 @@
   ansible.builtin.dnf:
     name: 
       - wget
+      - unzip
       - tomcat
       - python3
       - nfs-utils
