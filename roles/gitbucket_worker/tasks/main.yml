@@ -39,16 +39,22 @@
       JAVA_OPTS="-Djava.security.egd=file:/dev/urandom"
       JAVA_OPTS="-Dgitbucket.home=/gitbucket"
 
-- name: Download gitbucket.war
-  ansible.builtin.get_url:
-    url: https://github.com/gitbucket/gitbucket/releases/download/{{gitbucket_version}}/gitbucket.war
-    dest: /var/lib/tomcat/webapps/
-    mode: '0644'
+# - name: Download gitbucket.war
+#   ansible.builtin.get_url:
+#     url: https://github.com/gitbucket/gitbucket/releases/download/{{gitbucket_version}}/gitbucket.war
+#     dest: /var/lib/tomcat/webapps/
+#     mode: '0644'
 
-- name: Extract gitbucket.war
+# - name: Extract gitbucket.war
+#   ansible.builtin.unarchive:
+#     src: "/var/lib/tomcat/webapps/gitbucket.war"
+#     dest: "/var/lib/tomcat/webapps/gitbucket"
+
+- name: Download and unarchive gitbucket.war
   ansible.builtin.unarchive:
-    src: "/var/lib/tomcat/webapps/gitbucket.war"
-    dest: "/var/lib/tomcat/webapps/gitbucket"
+    src: https://github.com/gitbucket/gitbucket/releases/download/{{gitbucket_version}}/gitbucket.war
+    dest: /var/lib/tomcat/webapps/gitbucket
+    remote_src: yes    
 
 - name: Recursively change ownership on gitbucket
   file:
