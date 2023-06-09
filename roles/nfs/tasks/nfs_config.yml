@@ -1,9 +1,15 @@
 ---
-- name: Create a directory 'gitbucket' if it does not exist
+- name: Create "/gitbucket" directories
   ansible.builtin.file:
-    path: /gitbucket
+    path: "{{ item }}"
     state: directory
     mode: '0755'
+  with_items:
+   - /gitbucket
+   - /gitbucket/data
+   - /gitbucket/tmp
+   - /gitbucket/repositories
+   - /gitbucket/gist   
 
 - name: Configure exports in /etc/exports
   ansible.builtin.template:
