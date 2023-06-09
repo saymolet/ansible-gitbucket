@@ -12,19 +12,7 @@
       - java-1.8.0-openjdk-devel
       - policycoreutils-python-utils
     state: latest
-
-- name: Create "/gitbucket" directories
-  ansible.builtin.file:
-    path: "{{ item }}"
-    state: directory
-    mode: '0755'
-  with_items:
-   - /gitbucket
-   - /gitbucket/data
-   - /gitbucket/tmp
-   - /gitbucket/repositories
-   - /gitbucket/gist       
-
+    
 - name: Create "/gitbucket" directories
   ansible.builtin.file:
     path: "{{ item }}"

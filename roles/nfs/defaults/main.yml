@@ -1,7 +1,7 @@
 ---
 # defaults file for /etc/ansible/roles/nfs
 lp_nfsd_exports:
-  - /gitbucket/data 10.26.0.0/24(rw,sync)
-  - /gitbucket/tmp 10.26.0.0/24(rw,sync)
-  - /gitbucket/repositories 10.26.0.0/24(rw,sync)
-  - /gitbucket/gist 10.26.0.0/24(rw,sync)
+  - /gitbucket/data 10.26.0.0/24(rw,no_root_squash,sync)
+  - /gitbucket/tmp 10.26.0.0/24(rw,no_root_squash,sync)
+  - /gitbucket/repositories 10.26.0.0/24(rw,no_root_squash,sync)
+  - /gitbucket/gist 10.26.0.0/24(rw,no_root_squash,sync)
