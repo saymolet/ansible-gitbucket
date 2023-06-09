@@ -52,8 +52,7 @@
 - name: Insert "JAVA_OPTS" configuration block in "/etc/tomcat/tomcat.conf"
   ansible.builtin.lineinfile:
     path: /etc/tomcat/tomcat.conf
-    line: JAVA_OPTS="-Djava.security.egd=file:/dev/urandom -Dgitbucket.home=/gitbucket -Dgitbucket.disableCache
-=true -Dgitbucket.disableNewsFeed=true"
+    line: JAVA_OPTS="-Djava.security.egd=file:/dev/urandom -Dgitbucket.home=/gitbucket -Dgitbucket.disableCache=true -Dgitbucket.disableNewsFeed=true"
 
 # - name: Download gitbucket.war
 #   ansible.builtin.get_url:
