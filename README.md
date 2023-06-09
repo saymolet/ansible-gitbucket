@@ -13,8 +13,8 @@ This ansible playbook is intented for personal use. But feel free to borrow or m
 
 
 ### On Host:
-* dnf install mysql
-* dnf install ansible
+* sudo dnf update
+* dnf install ansible-core mysql
 * ansible-galaxy collection install community.mysql
 * ansible-galaxy collection install ansible.posix
 
