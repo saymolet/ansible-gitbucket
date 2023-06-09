@@ -12,7 +12,7 @@
       - java-1.8.0-openjdk-devel
       - policycoreutils-python-utils
     state: latest
-    
+
 - name: Create "/gitbucket" directories
   ansible.builtin.file:
     path: "{{ item }}"
@@ -42,17 +42,6 @@
     path: /etc/tomcat/tomcat.conf
     line: JAVA_OPTS="-Djava.security.egd=file:/dev/urandom -Dgitbucket.home=/gitbucket -Dgitbucket.disableCache=true -Dgitbucket.disableNewsFeed=true"
 
-# - name: Download gitbucket.war
-#   ansible.builtin.get_url:
-#     url: https://github.com/gitbucket/gitbucket/releases/download/{{gitbucket_version}}/gitbucket.war
-#     dest: /var/lib/tomcat/webapps/
-#     mode: '0644'
-
-# - name: Extract gitbucket.war
-#   ansible.builtin.unarchive:
-#     src: "/var/lib/tomcat/webapps/gitbucket.war"
-#     dest: "/var/lib/tomcat/webapps/gitbucket"
-
 - name: Download and unarchive gitbucket.war
   ansible.builtin.unarchive:
     src: https://github.com/gitbucket/gitbucket/releases/download/{{gitbucket_version}}/gitbucket.war
@@ -60,24 +49,6 @@
     remote_src: yes  
     owner: tomcat
     group: tomcat
-
-# - name: Recursively change ownership on gitbucket
-#   file:
-#     path: "/var/lib/tomcat/webapps/gitbucket"
-#     state: directory
-#     owner: "tomcat"
-#     group: "tomcat"  
-#     recurse: yes
-
-# - name: Delete gitbucket.war
-#   file:
-#     path: "/var/lib/tomcat/webapps/gitbucket.war"
-#     state: absent
-
-# - name: Move plugins to /tmp/plugins/
-#   ansible.builtin.shell:
-#     cmd: mv WEB-INF/classes/plugins/* /tmp/plugins/
-#     chdir: /var/lib/tomcat/webapps/gitbucket/
 
 - name: Permit traffic in public zone for 8080/tcp
   ansible.posix.firewalld:
@@ -123,48 +94,3 @@
     group: "tomcat"
     mode: "0755"   
     recurse: yes 
-
-- name: Start tomcat, if not started
-  ansible.builtin.service:
-    name: tomcat
-    state: restarted
-    enabled: true
-
-# - name: Wait until the file "/gitbucket/database.conf" is present before continuing
-#   ansible.builtin.wait_for:
-#     path: /gitbucket/database.conf
-#     delay: 45
-#   run_once: true  
-
-# - name: Restart tomcat on every node
-#   ansible.builtin.service:
-#     name: tomcat
-#     state: restarted
-#     enabled: true
-
-# - name: Wait for tomcat to initiate gitbucket per host
-#   ansible.builtin.wait_for:
-#     timeout: 45
-
-# - name: Create directory "/gitbucket/plugins" if it does not exist
-#   ansible.builtin.file:
-#     path: /gitbucket/plugins
-#     state: directory
-#     owner: tomcat
-#     group: tomcat
-#     mode: '0755'
-#   run_once: true  
-
-# - name: Move plugins to /gitbucket/plugins
-#   ansible.builtin.shell:
-#     cmd: mv /tmp/plugins/* /gitbucket/plugins/
-#   run_once: true  
-
-# - name: Change file ownership, group and permissions for "/gitbucket"
-#   ansible.builtin.file:
-#     path: "/gitbucket"
-#     owner: "tomcat"
-#     group: "tomcat"
-#     mode: "0755"
-#     recurse: yes
-#   run_once: true
