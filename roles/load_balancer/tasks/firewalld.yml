@@ -1,0 +1,11 @@
+---
+- name: Permit traffic in public zone for http/s services
+  ansible.posix.firewalld:
+    service: "{{ item }}"
+    zone: public
+    state: enabled
+    permanent: true
+    immediate: true
+  with_items:
+    - http
+    - https

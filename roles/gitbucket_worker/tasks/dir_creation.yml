@@ -1,0 +1,15 @@
+---
+- name: Create "/gitbucket" directories
+  ansible.builtin.file:
+    path: "{{ item }}"
+    state: directory
+    owner: tomcat
+    group: tomcat
+    mode: '0755'
+  with_items:
+   - /gitbucket
+   - /gitbucket/data
+   - /gitbucket/tmp
+   - /gitbucket/repositories
+   - /gitbucket/gist  
+   - /var/lib/tomcat/webapps/gitbucket

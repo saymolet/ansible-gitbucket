@@ -1,0 +1,8 @@
+---
+- name: Download and unarchive gitbucket.war
+  ansible.builtin.unarchive:
+    src: https://github.com/gitbucket/gitbucket/releases/download/{{gitbucket_version}}/gitbucket.war
+    dest: /var/lib/tomcat/webapps/gitbucket
+    remote_src: yes  
+    owner: tomcat
+    group: tomcat

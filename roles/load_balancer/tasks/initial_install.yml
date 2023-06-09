@@ -1,0 +1,8 @@
+---
+- name: Install the latest version of dependencies
+  ansible.builtin.dnf:
+    name: 
+      - nginx
+      - python3
+      - policycoreutils-python-utils
+    state: latest

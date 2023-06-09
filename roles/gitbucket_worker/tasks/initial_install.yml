@@ -1,0 +1,12 @@
+---
+- name: Install the latest version of dependencies
+  ansible.builtin.dnf:
+    name: 
+      - wget
+      - unzip
+      - tomcat
+      - python3
+      - nfs-utils
+      - java-1.8.0-openjdk-devel
+      - policycoreutils-python-utils
+    state: latest

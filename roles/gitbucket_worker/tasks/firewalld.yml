@@ -1,0 +1,17 @@
+---
+- name: Permit traffic in public zone for 8080/tcp
+  ansible.posix.firewalld:
+    port: 8080/tcp
+    zone: public
+    state: enabled
+    permanent: true
+    immediate: true
+
+#   firewalld
+# - name: Add source range for public zone
+#   ansible.posix.firewalld:
+#     source: 10.26.0.0/24
+#     zone: public
+#     state: enabled
+#     permanent: true
+#     immediate: true

@@ -1,0 +1,18 @@
+---
+- name: Configure nginx configs
+  ansible.builtin.template:
+    src: "{{ item.src }}"
+    dest: "/etc/nginx/{{ item.path }}"
+    owner: "root"
+    group: "root"
+    mode: "0644"
+  with_items:
+    - { src: upstream.conf.j2, path: conf.d/upstream.conf }
+    - { src: proxy.conf.j2, path: default.d/proxy.conf }
+    - { src: nginx.conf.j2, path: nginx.conf }
+    
+- name: Start nginx, if not started
+  ansible.builtin.service:
+    name: nginx
+    state: restarted
+    enabled: true

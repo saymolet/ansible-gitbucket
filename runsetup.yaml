@@ -1,16 +1,19 @@
 ---
 - name: Playbook with database instructions
   hosts: db_servers
+  become: yes
   roles:
   - database
 
 - name: Playbook with nfs instructions
   hosts: nfs_servers
+  become: yes
   roles:
   - nfs
 
 - name: Playbook with worker instructions
   hosts: workers
+  become: yes
   roles:
   - gitbucket_worker
   vars:
@@ -19,9 +22,9 @@
 
 - name: Restart tomcat sequentially
   hosts: workers
+  become: yes
   serial: 1
   tasks:
-
   - name: Restart tomcat
     ansible.builtin.service:
       name: tomcat
@@ -36,6 +39,7 @@
 
 - name: Playbook with load balancer instructions
   hosts: lb
+  become: yes
   roles:
   - load_balancer
   vars:
