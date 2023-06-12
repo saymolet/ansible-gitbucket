@@ -1,0 +1,8 @@
+---
+- name: Playbook with load balancer instructions
+  hosts: lb
+  become: yes
+  roles:
+    - load_balancer
+  vars:
+    worker_ips: "{{ groups.workers }}"

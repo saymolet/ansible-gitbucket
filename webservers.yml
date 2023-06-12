@@ -1,0 +1,26 @@
+---
+- name: Playbook with worker instructions
+  hosts: workers
+  become: yes
+  roles:
+    - gitbucket_worker
+  vars:
+    nfs_server: "{{ groups.nfs_servers.0 }}"
+    mysql_server: "{{ groups.db_servers.0 }}"
+
+- name: Restart tomcat sequentially
+  hosts: workers
+  become: yes
+  serial: 1
+  tasks:
+  - name: Restart tomcat
+    ansible.builtin.service:
+      name: tomcat
+      state: restarted
+      enabled: true   
+
+  - name: Wait for port 8080 to become open on the host, don't start checking for 20 seconds
+    ansible.builtin.wait_for:
+      host: 127.0.0.1
+      port: 8080
+      delay: 20

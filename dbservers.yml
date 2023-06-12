@@ -1,0 +1,6 @@
+---
+- name: Playbook with database instructions
+  hosts: db_servers
+  become: yes
+  roles:
+    - database

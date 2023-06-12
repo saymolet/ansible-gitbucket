@@ -1,0 +1,6 @@
+---
+- name: Playbook with nfs instructions
+  hosts: nfs_servers
+  become: yes
+  roles:
+    - nfs
