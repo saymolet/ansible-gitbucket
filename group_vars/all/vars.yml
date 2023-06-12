@@ -1,0 +1,3 @@
+---
+mysql_gitbucket_password: "{{ vault_mysql_gitbucket_password }}"
+
