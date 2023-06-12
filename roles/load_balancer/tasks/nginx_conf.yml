@@ -1,15 +1,24 @@
 ---
 - name: Configure nginx configs
   ansible.builtin.template:
-    src: "{{ item.src }}"
-    dest: "/etc/nginx/{{ item.path }}"
-    owner: "root"
-    group: "root"
+    src: "upstream.conf.j2"
+    dest: "/etc/nginx/conf.d/upstream.conf"
+    owner: root
+    group: root
     mode: "0644"
   with_items:
     - { src: upstream.conf.j2, path: conf.d/upstream.conf }
-    - { src: proxy.conf.j2, path: default.d/proxy.conf }
-    - { src: nginx.conf.j2, path: nginx.conf }
+
+- name: Copy nginx configs
+  ansible.builtin.copy:
+    src: "{{ item.src }}"
+    dest: "/etc/nginx/{{ item.path }}"
+    owner: root
+    group: root
+    mode: "0644"
+  with_items:
+    - { src: proxy.conf, path: default.d/proxy.conf }
+    - { src: nginx.conf, path: nginx.conf }    
     
 - name: Start nginx, if not started
   ansible.builtin.service:
