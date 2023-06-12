@@ -13,10 +13,9 @@ This ansible playbook is intented for personal use. But feel free to borrow or m
 
 
 ### On Host:
-* sudo dnf update
-* dnf install ansible-core mysql
-* ansible-galaxy collection install community.mysql
-* ansible-galaxy collection install ansible.posix
+* `dnf update`
+* `dnf install ansible-core`
+* `ansible-galaxy collection install -r requirements.yml`
 
 ## Usage
 Edit `hosts` file to include your managed machine adresses. Configure an ssh connection to your managed machines.
