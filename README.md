@@ -22,17 +22,19 @@ This ansible playbook is intented for personal use. But feel free to borrow or m
 Edit `hosts` file to include your managed machine adresses. Configure an ssh connection to your managed machines.
 
 Сhange the default password 'root' for vault.yml:
-```
-ansible-vault rekey vault.yml
+```console
+ansible-vault rekey group_vars/all/vault.yml
+ansible-vault rekey group_vars/db_servers/vault.yml
 ```
 
 Change default password variables inside `vault.yml` with:
-```
-ansible-vault edit vault.yml
+```console
+ansible-vault edit group_vars/all/vault.yml
+ansible-vault edit group_vars/db_servers/vault.yml
 ```
 
 Initiate a playbook by running:
-```
-ansible-playbook -e @vault.yml --ask-vault-pass -i production site.yml
+```console
+ansible-playbook --ask-vault-pass -i production site.yml
 ```
 
