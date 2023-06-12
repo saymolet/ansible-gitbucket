@@ -33,6 +33,6 @@ ansible-vault edit vault.yml
 
 Initiate a playbook by running:
 ```
-ansible-playbook -e @vault.yml --ask-vault-pass -i hosts runsetup.yaml
+ansible-playbook -e @vault.yml --ask-vault-pass -i production site.yml
 ```
 
