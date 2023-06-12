@@ -5,4 +5,4 @@
   roles:
     - load_balancer
   vars:
-    worker_ips: "{{ groups.workers }}"
+    worker_ips: "{{ groups.workers | map('extract', hostvars, 'ansible_host') }}"

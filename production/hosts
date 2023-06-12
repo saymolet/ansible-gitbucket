@@ -1,12 +1,18 @@
+db_server1 ansible_host=10.26.0.196
+nfs_server1 ansible_host=10.26.0.175
+worker_1 ansible_host=10.26.0.177
+worker_2 ansible_host=10.26.0.199
+load_balancer1 ansible_host=10.26.0.184
+
 [db_servers]
-10.26.0.196
+db_server1 
 
 [nfs_servers]
-10.26.0.175
+nfs_server1 
 
 [workers]
-10.26.0.177
-10.26.0.199
+worker_[1:2] 
 
 [lb]
-10.26.0.184
+load_balancer1 
+
